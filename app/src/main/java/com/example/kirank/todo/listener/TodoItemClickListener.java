@@ -7,4 +7,5 @@ package com.example.kirank.todo.listener;
 public interface TodoItemClickListener {
 
     void clicked(int position);
+    void checked(int position, int time);
 }

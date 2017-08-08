@@ -1,16 +1,18 @@
 package com.example.kirank.todo.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirank.todo.R;
-import com.example.kirank.todo.constants.Constants;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 import com.example.kirank.todo.model.TodoItem;
 
@@ -57,11 +59,41 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
     public class CustomViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         private TextView nameOfTodoItem;
+        private ImageView infoOfTodoItem;
+        private CheckBox stateOfTodoItem;
 
         public CustomViewHolder(final View itemView) {
             super(itemView);
-            nameOfTodoItem = (TextView) itemView.findViewById(R.id.todo_item);
-            itemView.setOnClickListener(this);
+
+            this.nameOfTodoItem = (TextView) itemView.findViewById(R.id.todo_item);
+            this.infoOfTodoItem = (ImageView) itemView.findViewById(R.id.info_id);
+            this.stateOfTodoItem = (CheckBox) itemView.findViewById(R.id.checkBox);
+
+            this.nameOfTodoItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    if(stateOfTodoItem.isChecked()) {
+                        stateOfTodoItem.setChecked(false);
+                    }
+                    else {
+                        stateOfTodoItem.setChecked(true);
+                    }
+                }
+            });
+
+            this.stateOfTodoItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                    if(isChecked) {
+                        nameOfTodoItem.setPaintFlags(nameOfTodoItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        removeAfterMilliSeconds(getAdapterPosition(), 2000);
+                    }
+                    else {
+                        nameOfTodoItem.setPaintFlags(0);
+                    }
+                }
+            });
+            this.infoOfTodoItem.setOnClickListener(this);
 
         }
 
@@ -70,5 +102,9 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
             final int position = getAdapterPosition();
             todoItemClickListener.clicked(position);
         }
+    }
+
+    private void removeAfterMilliSeconds(final int position, int time) {
+        todoItemClickListener.checked(position, time);
     }
 }

@@ -1,18 +1,26 @@
 package com.example.kirank.todo.controller;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
@@ -25,9 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
     private CoordinatorLayout coordinatorLayout;
     private ToDoMainAdapter toDoMainAdapter;
+    private EditText newTodo;
+    private Paint paint = new Paint();
     private final DataSource dataSource = new DataSource();
 
-    public MainActivity() { }
+    public MainActivity() {
+    }
 
 
     @Override
@@ -37,9 +48,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton addTodoItem = (FloatingActionButton) findViewById(R.id.fab);
         final RecyclerView todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
         this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
+        this.newTodo = (EditText) findViewById(R.id.new_todo);
+
+
+        this.newTodo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+                
+            }
+
+            @Override
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(final Editable s) {
+
+            }
+        });
 
         todoListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.toDoMainAdapter = new ToDoMainAdapter(dataSource.getTodoItems(), this, new TodoItemClickListener() {
@@ -47,25 +76,21 @@ public class MainActivity extends AppCompatActivity {
             public void clicked(final int position) {
                 Snackbar.make(coordinatorLayout, "Clicked on item at position " + position, Snackbar.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void checked(final int position, final int time) {
+                Snackbar.make(coordinatorLayout, "checked on item at position " + position, Snackbar.LENGTH_SHORT).show();
+            }
         });
 
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
         todoListRecyclerView.setAdapter(toDoMainAdapter);
 
-
-        addTodoItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Adding a new todo item", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
-        return new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        return new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
@@ -75,6 +100,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 deleteItem(viewHolder.getAdapterPosition());
+            }
+
+            @Override
+            public void onChildDraw(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+                    paint.setColor(Color.parseColor("#D32F2F"));
+                    RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                    c.drawRect(background, paint);
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white_24dp);
+                    RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                    c.drawBitmap(icon,null,icon_dest, paint);
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         };
     }
