@@ -1,5 +1,6 @@
 package com.example.kirank.todo.controller;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,10 +18,17 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
@@ -34,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private ToDoMainAdapter toDoMainAdapter;
     private EditText newTodo;
+    private ImageView newTodoInfo;
+    private ImageView newTodoButton;
     private Paint paint = new Paint();
     private final DataSource dataSource = new DataSource();
 
@@ -51,22 +61,60 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
         this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
         this.newTodo = (EditText) findViewById(R.id.new_todo);
+        this.newTodoInfo = (ImageView) findViewById(R.id.new_item_info_id);
+        this.newTodoButton = (ImageView) findViewById(R.id.new_todo_button);
 
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         this.newTodo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
-                
+
             }
 
             @Override
             public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
 
+                String newTodoItem = s.toString();
+                if (newTodoItem.length() > 0) {
+                    newTodoInfo.setVisibility(View.VISIBLE);
+                } else if (newTodoItem.length() == 0) {
+                    newTodoInfo.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void afterTextChanged(final Editable s) {
 
+            }
+        });
+
+
+        this.newTodo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (newTodo.getRight() - newTodo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        String newTodoString = newTodo.getText().toString();
+                        if(newTodoString == null || newTodoString.length() == 0) {
+
+                        }
+                        else {
+                            TodoItem newTodoItem = new TodoItem(newTodoString);
+                            dataSource.addItem(newTodoItem);
+                            toDoMainAdapter.notifyDataSetChanged();
+                            newTodo.setText("");
+                            newTodo.clearFocus();
+                            imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
+                        }
+
+                        return true;
+                    }
+                }
+                return false;
             }
         });
 
@@ -86,6 +134,22 @@ public class MainActivity extends AppCompatActivity {
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
         todoListRecyclerView.setAdapter(toDoMainAdapter);
+
+
+        this.newTodoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Snackbar.make(coordinatorLayout, "typed " + newTodo.getText().toString(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        this.newTodoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                newTodo.requestFocus();
+                imm.showSoftInput(newTodo, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
 
     }
 
@@ -111,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
                     float height = (float) itemView.getBottom() - (float) itemView.getTop();
                     float width = height / 3;
                     paint.setColor(Color.parseColor("#D32F2F"));
-                    RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                    RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
                     c.drawRect(background, paint);
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white_24dp);
-                    RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
-                    c.drawBitmap(icon,null,icon_dest, paint);
+                    RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
+                    c.drawBitmap(icon, null, icon_dest, paint);
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }

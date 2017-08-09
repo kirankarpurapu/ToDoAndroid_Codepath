@@ -27,6 +27,11 @@ public class TodoItem {
 
     private Priority priority = Priority.DEFAULT;
 
+
+    public TodoItem(@NonNull final String todoTask) {
+        this.todoTask =todoTask;
+    }
+
     public TodoItem(@NonNull final String todoTask, @NonNull final Date date) {
         this.todoTask = todoTask;
         this.dueDate = date;
