@@ -106,8 +106,10 @@ public class MainActivity extends AppCompatActivity {
                             TodoItem newTodoItem = new TodoItem(newTodoString);
                             dataSource.addItem(newTodoItem);
                             toDoMainAdapter.notifyDataSetChanged();
-                            newTodo.setText("");
+                            todoListRecyclerView.scrollToPosition(dataSource.getSize() - 1);
+                            newTodo.getText().clear();
                             newTodo.clearFocus();
+                            newTodo.setCursorVisible(false);
                             imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
                         }
 

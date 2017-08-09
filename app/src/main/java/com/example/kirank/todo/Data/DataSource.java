@@ -20,6 +20,16 @@ public class DataSource {
         this.todoItems.add( new TodoItem("Task1", new Date()));
         this.todoItems.add( new TodoItem("Task2", new Date()));
         this.todoItems.add( new TodoItem("Task3", new Date()));
+        this.todoItems.add( new TodoItem("Task4", new Date()));
+        this.todoItems.add( new TodoItem("Task5", new Date()));
+        this.todoItems.add( new TodoItem("Task6", new Date()));
+        this.todoItems.add( new TodoItem("Task7", new Date()));
+        this.todoItems.add( new TodoItem("Task8", new Date()));
+        this.todoItems.add( new TodoItem("Task9", new Date()));
+        this.todoItems.add( new TodoItem("Task10", new Date()));
+        this.todoItems.add( new TodoItem("Task11", new Date()));
+        this.todoItems.add( new TodoItem("Task12", new Date()));
+        this.todoItems.add( new TodoItem("Task13", new Date()));
     }
 
     public boolean addItem(@NonNull final TodoItem todoItem) {
@@ -44,5 +54,9 @@ public class DataSource {
     public void add(final int position, final TodoItem item) {
 
         this.todoItems.add(position, item);
+    }
+
+    public int getSize() {
+        return this.todoItems.size();
     }
 }
