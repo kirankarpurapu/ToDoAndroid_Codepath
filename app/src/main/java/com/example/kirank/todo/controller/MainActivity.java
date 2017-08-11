@@ -1,6 +1,7 @@
 package com.example.kirank.todo.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,17 +19,13 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
@@ -45,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView newTodoInfo;
     private ImageView newTodoButton;
     private Paint paint = new Paint();
+    private RecyclerView todoListRecyclerView;
     private final DataSource dataSource = new DataSource();
 
     public MainActivity() {
@@ -55,14 +53,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
-        final RecyclerView todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
-        this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
-        this.newTodo = (EditText) findViewById(R.id.new_todo);
-        this.newTodoInfo = (ImageView) findViewById(R.id.new_item_info_id);
-        this.newTodoButton = (ImageView) findViewById(R.id.new_todo_button);
+        bindViews();
 
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -124,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
         this.toDoMainAdapter = new ToDoMainAdapter(dataSource.getTodoItems(), this, new TodoItemClickListener() {
             @Override
             public void clicked(final int position) {
-                Snackbar.make(coordinatorLayout, "Clicked on item at position " + position, Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(coordinatorLayout, "Clicked on item at position " + position, Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -153,6 +149,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void bindViews() {
+
+        this.todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
+        this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
+        this.newTodo = (EditText) findViewById(R.id.new_todo);
+        this.newTodoInfo = (ImageView) findViewById(R.id.new_item_info_id);
+        this.newTodoButton = (ImageView) findViewById(R.id.new_todo_button);
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
