@@ -24,6 +24,7 @@ import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,8 +95,9 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
         if (calendar != null) {
             this.remindOnADaySwitch.setChecked(true);
             this.calendarToggleSwitch.setChecked(false);
-            this.toDoDatePicker.updateDate(calendar.YEAR, calendar.MONTH, calendar.DAY_OF_MONTH);
-            this.toDoSelectedDayTextView.setText(calendar.MONTH + "/ " + calendar.DAY_OF_MONTH + "/ " + calendar.YEAR);
+            this.toDoDatePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            this.toDoSelectedDayTextView.setText(calendar.get(Calendar.MONTH) + "/ " + calendar.get(Calendar.DAY_OF_MONTH)
+                    + "/ " + calendar.get(Calendar.YEAR));
             this.toDoSelectedDayTextView.setVisibility(View.VISIBLE);
             this.calendarToggleSwitch.setVisibility(View.VISIBLE);
         }
@@ -179,6 +181,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
                 int day = this.toDoDatePicker.getDayOfMonth();
                 int month = this.toDoDatePicker.getMonth() + 1;
                 int year = this.toDoDatePicker.getYear();
+
                 calendar = Calendar.getInstance();
                 calendar.set(year, month, day);
             }
