@@ -2,6 +2,7 @@ package com.example.kirank.todo.model;
 
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,8 +15,10 @@ import java.util.Date;
 public class TodoItem {
 
     private String todoTask;
-    private Date dueDate;
+    private Priority priority = Priority.DEFAULT;
+    private Calendar dueDate = null;
     private String notes;
+
 
     public String getNotes() {
         return this.notes;
@@ -25,14 +28,12 @@ public class TodoItem {
         this.notes = notes;
     }
 
-    private Priority priority = Priority.DEFAULT;
-
 
     public TodoItem(@NonNull final String todoTask) {
         this.todoTask =todoTask;
     }
 
-    public TodoItem(@NonNull final String todoTask, @NonNull final Date date) {
+    public TodoItem(@NonNull final String todoTask, @NonNull final Calendar date) {
         this.todoTask = todoTask;
         this.dueDate = date;
     }
@@ -45,11 +46,11 @@ public class TodoItem {
         this.todoTask = todoTask;
     }
 
-    public Date getDueDate() {
+    public Calendar getDueDate() {
         return this.dueDate;
     }
 
-    public void setDueDate(@NonNull final  Date dueDate) {
+    public void setDueDate(@NonNull final  Calendar dueDate) {
         this.dueDate = dueDate;
     }
 

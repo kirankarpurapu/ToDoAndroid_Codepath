@@ -20,13 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="20dp">
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/todo_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:ems="20"
                 android:hint="ToDo Task"
                 android:inputType="textPersonName"
                 android:paddingTop="20dp"/>
@@ -34,49 +34,62 @@
             <Switch
                 android:id="@+id/day_switch"
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
+                android:paddingTop="20dp"
                 android:text="Remind on a day"/>
 
-            <TextView
-                android:id="@+id/todo_selected_day"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Select A Day"
-                android:visibility="gone"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/todo_selected_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="Select A Day"
+                    android:visibility="gone"/>
+
+                <Switch
+                    android:id="@+id/calendar_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="15dp"
+                    android:text="Toggle Calendar"
+                    android:visibility="gone"/>
+
+
+            </LinearLayout>
+
 
             <DatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
+                android:paddingTop="20dp"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
+                android:paddingTop="20dp"
                 android:text="Priority"/>
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="10"
-                android:progress="1"/>
-
+            <Spinner
+                android:id="@+id/priority_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/todo_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Notes"
                 android:inputType="textMultiLine"
-                android:paddingTop="10dp"/>
+                android:paddingTop="20dp"/>
 
 
         </LinearLayout>

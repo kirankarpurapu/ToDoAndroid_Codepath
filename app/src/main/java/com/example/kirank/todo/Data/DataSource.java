@@ -13,50 +13,49 @@ import java.util.Date;
 
 public class DataSource {
 
-    private final ArrayList<TodoItem> todoItems;
+    private static final ArrayList<TodoItem> todoItems = new ArrayList<>();
 
     public DataSource() {
-        this.todoItems = new ArrayList<>();
-        this.todoItems.add( new TodoItem("Task1", new Date()));
-        this.todoItems.add( new TodoItem("Task2", new Date()));
-        this.todoItems.add( new TodoItem("Task3", new Date()));
-        this.todoItems.add( new TodoItem("Task4", new Date()));
-        this.todoItems.add( new TodoItem("Task5", new Date()));
-        this.todoItems.add( new TodoItem("Task6", new Date()));
-        this.todoItems.add( new TodoItem("Task7", new Date()));
-        this.todoItems.add( new TodoItem("Task8", new Date()));
-        this.todoItems.add( new TodoItem("Task9", new Date()));
-        this.todoItems.add( new TodoItem("Task10", new Date()));
-        this.todoItems.add( new TodoItem("Task11", new Date()));
-        this.todoItems.add( new TodoItem("Task12", new Date()));
-        this.todoItems.add( new TodoItem("Task13", new Date()));
+        todoItems.add( new TodoItem("Task2"));
+        todoItems.add( new TodoItem("Task1"));
+        todoItems.add( new TodoItem("Task4"));
+        todoItems.add( new TodoItem("Task5"));
+        todoItems.add( new TodoItem("Task6"));
+        todoItems.add( new TodoItem("Task3"));
+        todoItems.add( new TodoItem("Task7"));
+        todoItems.add( new TodoItem("Task8"));
+        todoItems.add( new TodoItem("Task9"));
+        todoItems.add( new TodoItem("Task10"));
+        todoItems.add( new TodoItem("Task11"));
+        todoItems.add( new TodoItem("Task12"));
+        todoItems.add( new TodoItem("Task13"));
     }
 
     public boolean addItem(@NonNull final TodoItem todoItem) {
 
-        return this.todoItems.add(todoItem);
+        return todoItems.add(todoItem);
     }
     public ArrayList<TodoItem> getTodoItems() {
 
-        return this.todoItems;
+        return todoItems;
     }
 
     public TodoItem remove(final int position) {
 
-        return this.todoItems.remove(position);
+        return todoItems.remove(position);
     }
 
     public TodoItem get(final int position) {
 
-        return this.todoItems.get(position);
+        return todoItems.get(position);
     }
 
     public void add(final int position, final TodoItem item) {
 
-        this.todoItems.add(position, item);
+        todoItems.add(position, item);
     }
 
     public int getSize() {
-        return this.todoItems.size();
+        return todoItems.size();
     }
 }

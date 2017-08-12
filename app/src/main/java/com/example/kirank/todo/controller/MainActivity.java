@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
@@ -118,8 +119,13 @@ public class MainActivity extends AppCompatActivity {
         this.toDoMainAdapter = new ToDoMainAdapter(dataSource.getTodoItems(), this, new TodoItemClickListener() {
             @Override
             public void clicked(final int position) {
-//                Snackbar.make(coordinatorLayout, "Clicked on item at position " + position, Snackbar.LENGTH_SHORT).show();
+
+                Log.d(Constants.MAIN_ACTIVITY, "clicked on info of " + position);
+
+//                Toast.makeText(getApplicationContext(), position, Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                intent.putExtra(Constants.SELECTED_ITEM_INDEX, position);
                 startActivity(intent);
             }
 
@@ -137,7 +143,14 @@ public class MainActivity extends AppCompatActivity {
         this.newTodoInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Snackbar.make(coordinatorLayout, "typed " + newTodo.getText().toString(), Snackbar.LENGTH_SHORT).show();
+                Log.d(Constants.MAIN_ACTIVITY, "clicked on info at new todo place");
+                TodoItem newItem = new TodoItem(newTodo.getText().toString());
+
+                dataSource.addItem(newItem);
+
+                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                intent.putExtra(Constants.SELECTED_ITEM_INDEX, dataSource.getSize() - 1);
+                startActivity(intent);
             }
         });
 
