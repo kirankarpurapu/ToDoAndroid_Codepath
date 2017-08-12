@@ -24,7 +24,6 @@ import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
     private Switch remindOnADaySwitch;
     private Switch calendarToggleSwitch;
     private TextView toDoSelectedDayTextView;
-    private DatePicker toDoDatePicker;
+    private CustomDatePicker toDoDatePicker;
     private Spinner prioritySpinner;
     private EditText toDoNotes;
     private int toDoItemLocation;
@@ -66,7 +65,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
         this.toDoEditText = (EditText) findViewById(R.id.todo_editText);
         this.remindOnADaySwitch = (Switch) findViewById(R.id.day_switch);
-        this.toDoDatePicker = (DatePicker) findViewById(R.id.datePicker);
+        this.toDoDatePicker = (CustomDatePicker) findViewById(R.id.datePicker);
         this.toDoSelectedDayTextView = (TextView) findViewById(R.id.todo_selected_day);
         this.calendarToggleSwitch = (Switch) findViewById(R.id.calendar_switch);
         this.prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
@@ -79,8 +78,8 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             @Override
             public void onDateChanged(final DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                String updatedDateSting = monthOfYear + "/ " + dayOfMonth + "/ " + year;
+                newDate.set(year, monthOfYear + 1, dayOfMonth);
+                String updatedDateSting = (monthOfYear + 1) + "/ " + dayOfMonth + "/ " + year;
                 toDoSelectedDayTextView.setText(updatedDateSting);
             }
         });
@@ -95,8 +94,8 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
         if (calendar != null) {
             this.remindOnADaySwitch.setChecked(true);
             this.calendarToggleSwitch.setChecked(false);
-            final Date date = calendar.getTime();
-            this.toDoSelectedDayTextView.setText(date.getMonth() + "/ " + date.getDay() + "/ " + date.getYear());
+            this.toDoDatePicker.updateDate(calendar.YEAR, calendar.MONTH, calendar.DAY_OF_MONTH);
+            this.toDoSelectedDayTextView.setText(calendar.MONTH + "/ " + calendar.DAY_OF_MONTH + "/ " + calendar.YEAR);
             this.toDoSelectedDayTextView.setVisibility(View.VISIBLE);
             this.calendarToggleSwitch.setVisibility(View.VISIBLE);
         }
@@ -174,8 +173,9 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
             final String toDoString = this.toDoEditText.getText().toString();
             Calendar calendar = null;
+
             if(this.remindOnADaySwitch.isChecked()) {
-                
+
                 int day = this.toDoDatePicker.getDayOfMonth();
                 int month = this.toDoDatePicker.getMonth() + 1;
                 int year = this.toDoDatePicker.getYear();
