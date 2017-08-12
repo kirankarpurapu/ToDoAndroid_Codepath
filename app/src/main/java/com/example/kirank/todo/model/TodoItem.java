@@ -18,6 +18,7 @@ public class TodoItem {
     private Priority priority = Priority.DEFAULT;
     private Calendar dueDate = null;
     private String notes;
+    private boolean isCompleted;
 
 
     public String getNotes() {
@@ -60,5 +61,13 @@ public class TodoItem {
 
     public void setPriority(@NonNull final  Priority priority) {
         this.priority = priority;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(final boolean completed) {
+        isCompleted = completed;
     }
 }

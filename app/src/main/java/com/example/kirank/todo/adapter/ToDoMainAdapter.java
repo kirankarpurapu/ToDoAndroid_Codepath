@@ -108,6 +108,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
     }
 
     private void removeAfterMilliSeconds(final int position, int time) {
+
         todoItemClickListener.checked(position, time);
     }
 }

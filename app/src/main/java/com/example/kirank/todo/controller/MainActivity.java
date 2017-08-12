@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
                 dataSource.addItem(newItem);
 
+                newTodo.getText().clear();
+                newTodo.clearFocus();
+                newTodo.setCursorVisible(false);
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
+
                 Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
                 intent.putExtra(Constants.SELECTED_ITEM_INDEX, dataSource.getSize() - 1);
                 startActivity(intent);
@@ -166,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void checked(final int position, final int time) {
                 Snackbar.make(coordinatorLayout, "checked on item at position " + position, Snackbar.LENGTH_SHORT).show();
+                dataSource.get(position).setCompleted(true);
             }
         });
 
@@ -227,17 +234,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        toDoMainAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
