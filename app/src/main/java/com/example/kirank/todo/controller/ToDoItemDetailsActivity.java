@@ -40,6 +40,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
     private DatePicker toDoDatePicker;
     private Spinner prioritySpinner;
     private EditText toDoNotes;
+    private int toDoItemLocation;
 
 
     @Override
@@ -53,9 +54,10 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
         } else {
             Log.d(Constants.TODO_DETAILS_ACTIVITY, "Loading Todo item at location " + index);
+            this.toDoItemLocation = index;
 
             bindViews();
-            initScreen(index);
+            initScreen(this.toDoItemLocation);
             applyListeners();
         }
     }
@@ -94,7 +96,9 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             this.remindOnADaySwitch.setChecked(true);
             this.calendarToggleSwitch.setChecked(false);
             final Date date = calendar.getTime();
-            this.toDoEditText.setText(date.getMonth() + "/ " + date.getDay() + "/ " + date.getYear());
+            this.toDoSelectedDayTextView.setText(date.getMonth() + "/ " + date.getDay() + "/ " + date.getYear());
+            this.toDoSelectedDayTextView.setVisibility(View.VISIBLE);
+            this.calendarToggleSwitch.setVisibility(View.VISIBLE);
         }
 
         final Priority itemPriority = item.getPriority();
@@ -116,10 +120,10 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
     private void populatePrioritySpinner() {
 
         List<String> priorities = new ArrayList<>();
-        priorities.add(Priority.DEFAULT.getPriority());
-        priorities.add(Priority.LOW.getPriority());
-        priorities.add(Priority.MEDIUM.getPriority());
-        priorities.add(Priority.HIGH.getPriority());
+        priorities.add(Priority.DEFAULT.getPriorityAsString());
+        priorities.add(Priority.LOW.getPriorityAsString());
+        priorities.add(Priority.MEDIUM.getPriorityAsString());
+        priorities.add(Priority.HIGH.getPriorityAsString());
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, priorities);
         this.prioritySpinner.setAdapter(spinnerAdapter);
@@ -164,14 +168,42 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            Toast.makeText(getApplicationContext(), "Saving.....", Toast.LENGTH_SHORT).show();
+
+            final String toDoString = this.toDoEditText.getText().toString();
+            Calendar calendar = null;
+            if(this.remindOnADaySwitch.isChecked()) {
+                
+                int day = this.toDoDatePicker.getDayOfMonth();
+                int month = this.toDoDatePicker.getMonth() + 1;
+                int year = this.toDoDatePicker.getYear();
+                calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+            }
+
+            Priority priority = Priority.getPriority(prioritySpinner.getSelectedItem().toString());
+            if(priority == null) {
+                priority = Priority.DEFAULT;
+            }
+
+            String notes = toDoNotes.getText().toString();
+            if(notes.length() == 0) {
+                notes = null;
+            }
+
+            DataSource dataSource = new DataSource();
+            TodoItem thisItem = dataSource.get(toDoItemLocation);
+            thisItem.setTodoTask(toDoString);
+            thisItem.setDueDate(calendar);
+            thisItem.setPriority(priority);
+            thisItem.setNotes(notes);
+            dataSource.remove(toDoItemLocation);
+            dataSource.add(toDoItemLocation, thisItem);
+
+            finish();
+
             return true;
         } else if (id == R.id.action_cancel) {
             finish();

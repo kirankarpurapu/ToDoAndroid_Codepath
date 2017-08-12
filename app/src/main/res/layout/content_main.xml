@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="10dp"
     android:weightSum="10">
 
     <android.support.v7.widget.RecyclerView
@@ -21,14 +22,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:weightSum="10">
 
         <ImageView
             android:id="@+id/new_todo_button"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:src="@drawable/ic_add_circle_outline_black_24dp"/>
 
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="8"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="bottom"
 
             android:drawableRight="@drawable/ic_done_black_24dp"
             android:hint="enter new todo item"
@@ -49,7 +50,7 @@
             android:id="@+id/new_item_info_id"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:src="@drawable/ic_info_outline_black_24dp"
             android:visibility="gone"/>

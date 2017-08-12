@@ -15,20 +15,11 @@ public class DataSource {
 
     private static final ArrayList<TodoItem> todoItems = new ArrayList<>();
 
-    public DataSource() {
-        todoItems.add( new TodoItem("Task2"));
+    static {
         todoItems.add( new TodoItem("Task1"));
-        todoItems.add( new TodoItem("Task4"));
-        todoItems.add( new TodoItem("Task5"));
-        todoItems.add( new TodoItem("Task6"));
+        todoItems.add( new TodoItem("Task2"));
         todoItems.add( new TodoItem("Task3"));
-        todoItems.add( new TodoItem("Task7"));
-        todoItems.add( new TodoItem("Task8"));
-        todoItems.add( new TodoItem("Task9"));
-        todoItems.add( new TodoItem("Task10"));
-        todoItems.add( new TodoItem("Task11"));
-        todoItems.add( new TodoItem("Task12"));
-        todoItems.add( new TodoItem("Task13"));
+        todoItems.add( new TodoItem("Task4"));
     }
 
     public boolean addItem(@NonNull final TodoItem todoItem) {

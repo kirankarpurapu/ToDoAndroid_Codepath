@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView todoListRecyclerView;
     private final DataSource dataSource = new DataSource();
 
+
     public MainActivity() {
     }
 
@@ -58,9 +58,74 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         bindViews();
+        addListeners();
+        prepareAdapter();
+    }
 
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void bindViews() {
 
+        this.todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
+        this.todoListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
+        this.newTodo = (EditText) findViewById(R.id.new_todo);
+        this.newTodoInfo = (ImageView) findViewById(R.id.new_item_info_id);
+        this.newTodoButton = (ImageView) findViewById(R.id.new_todo_button);
+    }
+
+    private void addListeners() {
+
+        this.newTodoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                newTodo.requestFocus();
+                imm.showSoftInput(newTodo, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
+        this.newTodoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(Constants.MAIN_ACTIVITY, "clicked on info at new todo place");
+                TodoItem newItem = new TodoItem(newTodo.getText().toString());
+
+                dataSource.addItem(newItem);
+
+                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                intent.putExtra(Constants.SELECTED_ITEM_INDEX, dataSource.getSize() - 1);
+                startActivity(intent);
+            }
+        });
+
+        this.newTodo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (newTodo.getRight() - newTodo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        String newTodoString = newTodo.getText().toString();
+                        if (newTodoString == null || newTodoString.length() == 0) {
+
+                        } else {
+                            TodoItem newTodoItem = new TodoItem(newTodoString);
+                            dataSource.addItem(newTodoItem);
+                            toDoMainAdapter.notifyDataSetChanged();
+                            todoListRecyclerView.scrollToPosition(dataSource.getSize() - 1);
+                            newTodo.getText().clear();
+                            newTodo.clearFocus();
+                            newTodo.setCursorVisible(false);
+                            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
+                        }
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         this.newTodo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
@@ -84,46 +149,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
 
-        this.newTodo.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_RIGHT = 2;
+    private void prepareAdapter() {
 
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (newTodo.getRight() - newTodo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-                        String newTodoString = newTodo.getText().toString();
-                        if(newTodoString == null || newTodoString.length() == 0) {
-
-                        }
-                        else {
-                            TodoItem newTodoItem = new TodoItem(newTodoString);
-                            dataSource.addItem(newTodoItem);
-                            toDoMainAdapter.notifyDataSetChanged();
-                            todoListRecyclerView.scrollToPosition(dataSource.getSize() - 1);
-                            newTodo.getText().clear();
-                            newTodo.clearFocus();
-                            newTodo.setCursorVisible(false);
-                            imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
-                        }
-
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-        todoListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.toDoMainAdapter = new ToDoMainAdapter(dataSource.getTodoItems(), this, new TodoItemClickListener() {
             @Override
             public void clicked(final int position) {
 
                 Log.d(Constants.MAIN_ACTIVITY, "clicked on info of " + position);
-
-//                Toast.makeText(getApplicationContext(), position, Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
                 intent.putExtra(Constants.SELECTED_ITEM_INDEX, position);
                 startActivity(intent);
@@ -140,37 +174,6 @@ public class MainActivity extends AppCompatActivity {
         todoListRecyclerView.setAdapter(toDoMainAdapter);
 
 
-        this.newTodoInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Log.d(Constants.MAIN_ACTIVITY, "clicked on info at new todo place");
-                TodoItem newItem = new TodoItem(newTodo.getText().toString());
-
-                dataSource.addItem(newItem);
-
-                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
-                intent.putExtra(Constants.SELECTED_ITEM_INDEX, dataSource.getSize() - 1);
-                startActivity(intent);
-            }
-        });
-
-        this.newTodoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                newTodo.requestFocus();
-                imm.showSoftInput(newTodo, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-    }
-
-    private void bindViews() {
-
-        this.todoListRecyclerView = (RecyclerView) findViewById(R.id.mainTodoRecyclerView);
-        this.coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_layout);
-        this.newTodo = (EditText) findViewById(R.id.new_todo);
-        this.newTodoInfo = (ImageView) findViewById(R.id.new_item_info_id);
-        this.newTodoButton = (ImageView) findViewById(R.id.new_todo_button);
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
@@ -239,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Snackbar.make(coordinatorLayout, "Settings coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
         }
 
