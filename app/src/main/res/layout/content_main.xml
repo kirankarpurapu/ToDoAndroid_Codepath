@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="10dp"
     android:weightSum="20">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mainTodoRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_weight="19">
+        android:layout_marginTop="35dp"
+        android:layout_weight="19"
+        android:padding="5dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -48,8 +48,8 @@
             android:id="@+id/new_item_info_id"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:src="@drawable/ic_info_outline_black_24dp"
             android:visibility="gone"/>
 

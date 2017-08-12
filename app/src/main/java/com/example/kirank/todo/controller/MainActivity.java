@@ -255,6 +255,10 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(coordinatorLayout, "Settings coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
         }
+        else if(id == R.id.action_show_completed) {
+            Snackbar.make(coordinatorLayout, "Completed Items coming soon !! ", Snackbar.LENGTH_SHORT).show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

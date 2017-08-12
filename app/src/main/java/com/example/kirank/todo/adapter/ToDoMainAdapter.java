@@ -2,6 +2,7 @@ package com.example.kirank.todo.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
 import com.example.kirank.todo.listener.TodoItemClickListener;
+import com.example.kirank.todo.model.Priority;
 import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
@@ -51,6 +53,23 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
 
         TodoItem item = todoItems.get(position);
         holder.nameOfTodoItem.setText(item.getTodoTask());
+        Priority priority = item.getPriority();
+        if (priority == Priority.DEFAULT) {
+            holder.priorityOfTodoItem.setVisibility(View.GONE);
+
+        } else if (priority == Priority.LOW) {
+            holder.priorityOfTodoItem.setVisibility(View.VISIBLE);
+            holder.priorityOfTodoItem.setImageResource(R.drawable.ic_filter_1_black_24dp);
+
+        } else if (priority == Priority.MEDIUM) {
+            holder.priorityOfTodoItem.setVisibility(View.VISIBLE);
+            holder.priorityOfTodoItem.setImageResource(R.drawable.ic_filter_2_black_24dp);
+
+        } else if (priority == Priority.HIGH) {
+            holder.priorityOfTodoItem.setVisibility(View.VISIBLE);
+            holder.priorityOfTodoItem.setImageResource(R.drawable.ic_filter_3_black_24dp);
+
+        }
     }
 
     @Override
@@ -62,6 +81,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
 
         private TextView nameOfTodoItem;
         private ImageView infoOfTodoItem;
+        private ImageView priorityOfTodoItem;
         private CheckBox stateOfTodoItem;
 
         public CustomViewHolder(final View itemView) {
@@ -69,6 +89,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
 
             this.nameOfTodoItem = (TextView) itemView.findViewById(R.id.todo_item);
             this.infoOfTodoItem = (ImageView) itemView.findViewById(R.id.info_id);
+            this.priorityOfTodoItem = (ImageView) itemView.findViewById(R.id.todo_priority);
             this.stateOfTodoItem = (CheckBox) itemView.findViewById(R.id.checkBox);
 
             this.nameOfTodoItem.setOnClickListener(new View.OnClickListener() {

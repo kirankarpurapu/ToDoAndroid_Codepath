@@ -20,6 +20,7 @@ public class DataSource {
         todoItems.add( new TodoItem("Task2"));
         todoItems.add( new TodoItem("Task3"));
         todoItems.add( new TodoItem("Task4"));
+
     }
 
     public boolean addItem(@NonNull final TodoItem todoItem) {

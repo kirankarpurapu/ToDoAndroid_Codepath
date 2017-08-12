@@ -4,6 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="clip_vertical"
+              android:layout_marginTop="20dp"
               android:background="@drawable/background"
               android:clickable="true"
               android:gravity="center_vertical"
@@ -13,15 +14,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp">
+        android:layout_weight="9">
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
+
+        <ImageView
+            android:id="@+id/todo_priority"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            android:src="@drawable/ic_filter_1_black_24dp"/>
 
 
         <TextView
@@ -31,6 +38,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             android:maxWidth="200dp"
+            android:paddingLeft="5dp"
             android:overScrollMode="ifContentScrolls"
             android:text="Sample Task"
             android:textSize="20dp"/>
