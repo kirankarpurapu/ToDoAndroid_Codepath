@@ -1,6 +1,6 @@
-# Pre-work - *simpLISTic*
+# Pre-work - simp**LIST**ic
 
-**simpLISTic** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting existing items. Users can also mark items as completed and achieve a sense of satisfaction!
+**simpLISTic** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting existing items. Users can also mark items as completed and achieve a sense of satisfaction!. The design and functionality of this app is highly inspired from the todo list app that iOS has to offer. I personally feel that the design is pretty clean and simplified. Also, the users can use the app from the get-go without figuring out how the app works.
 
 Submitted by: **Kiran Karpurapu**
 
@@ -19,7 +19,7 @@ The following **optional** features are implemented:
 * [Y] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [Y] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [Y] Add support for completion due dates for todo items (and display within listview item)
-* [N] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items : My UI design looks better if I have a new activity for editing items.
+* [N] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items : *My UI design looks better if I have a new activity for editing items.*
 * [Y] Add support for selecting the priority of each todo item (and display in listview item)
 * [Y] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
@@ -45,19 +45,21 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 
 **Question 1:** "What are your reactions to the Android app development platform so far? Compare and contrast Android's approach to layouts and user interfaces in past platforms you've used."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** I really liked making android applications. I have a feeling that I can convert all the simple and useful ideas that I get now can be converted into tangible mobile applications. I am natively a backend developer in java. I have no previous experience of doing front-end before I started doing android. I really like the concept of layouts and binding them to activites. The relation is stated very clearly and nothing is hidden or complicated.
 
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** I feel the adapter is a source of configuration and data for the recycler view I used in the app. It is the adapter that lets the developer send and configure the data that needs to be displayed on the recycler view. The adapter also lets the user interact with the list by supporting various UI event listeners.
 
 ## Notes
 
 Describe any challenges encountered while building the app.
 
+I am used to saving data in NO-SQL databases by making API calls and querying them using concepts different from SQL. Working with DBFlow (a wrapper around SQLite) was something new for me and I had to invest a considerable amount of time to wrap my head around it. Also mimicking the UI from the iOS app was also challenging.
+
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2017] [kirankarpurapu]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
