@@ -27,10 +27,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.kirank.todo.Data.DataSource;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.adapter.ToDoMainAdapter;
 import com.example.kirank.todo.constants.Constants;
+import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 import com.example.kirank.todo.model.TodoItem;
 
@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
         todoListRecyclerView.setAdapter(toDoMainAdapter);
 
-
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
@@ -254,8 +253,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Snackbar.make(coordinatorLayout, "Settings coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
-        }
-        else if(id == R.id.action_show_completed) {
+        } else if (id == R.id.action_show_completed) {
             Snackbar.make(coordinatorLayout, "Completed Items coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
         }

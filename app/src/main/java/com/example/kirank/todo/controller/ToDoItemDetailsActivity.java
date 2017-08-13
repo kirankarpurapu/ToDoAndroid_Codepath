@@ -16,7 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kirank.todo.Data.DataSource;
+import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
 import com.example.kirank.todo.model.Priority;
@@ -24,7 +24,6 @@ import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**

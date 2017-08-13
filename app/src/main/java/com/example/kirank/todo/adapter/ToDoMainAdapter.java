@@ -54,6 +54,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
         TodoItem item = todoItems.get(position);
         holder.nameOfTodoItem.setText(item.getTodoTask());
         Priority priority = item.getPriority();
+
         if (priority == Priority.DEFAULT) {
             holder.priorityOfTodoItem.setVisibility(View.GONE);
 
