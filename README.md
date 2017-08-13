@@ -1,4 +1,5 @@
-# Pre-work - simp**LIST**ic
+# Pre-work   
+simp**LIST**ic
 
 **simpLISTic** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting existing items. Users can also mark items as completed and achieve a sense of satisfaction!. The design and functionality of this app is highly inspired from the todo list app that iOS has to offer. I personally feel that the design is pretty clean and simplified. Also, the users can use the app from the get-go without figuring out how the app works.
 
@@ -35,9 +36,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Project Analysis
 
@@ -49,7 +49,7 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
-**Answer:** I feel the adapter is a source of configuration and data for the recycler view I used in the app. It is the adapter that lets the developer send and configure the data that needs to be displayed on the recycler view. The adapter also lets the user interact with the list by supporting various UI event listeners.
+**Answer:** I feel the adapter is a source of configuration and data for the recycler view I used in the app. It is the adapter that lets the developer send and configure the data that needs to be displayed on the recycler view. The adapter also lets the user interact with the list by supporting various UI event listeners. Also because I was using a recycler view adapter, I did not have to an array adapter. recycler view adapter exposes several handy methods that can be overidden to inflate our custom layouts and bind data to them.
 
 ## Notes
 

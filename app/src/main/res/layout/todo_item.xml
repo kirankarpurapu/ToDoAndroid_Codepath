@@ -53,7 +53,7 @@
             android:paddingLeft="10dp"
             android:visibility="gone"
             android:text="9/2/2017"
-            android:textSize="8dp"
+            android:textSize="10dp"
             android:textColor="#343434"/>
 
     </LinearLayout>
