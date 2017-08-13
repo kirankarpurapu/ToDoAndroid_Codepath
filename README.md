@@ -1,7 +1,6 @@
-# Pre-work   
-simp**LIST**ic
+# Pre-work - simp**LIST**ic
 
-**simpLISTic** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting existing items. Users can also mark items as completed and achieve a sense of satisfaction!. The design and functionality of this app is highly inspired from the todo list app that iOS has to offer. I personally feel that the design is pretty clean and simplified. Also, the users can use the app from the get-go without figuring out how the app works.
+simp**LIST**ic is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting existing items. Users can also mark items as completed and achieve a sense of satisfaction! The design and functionality of this app is highly inspired from the todo list app that iOS has to offer. I personally feel that the design is pretty clean and simplified. Also, the users can use the app from the get-go without figuring out how the app works.
 
 Submitted by: **Kiran Karpurapu**
 
@@ -27,7 +26,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [Y] Ability to mark an item as completed. Just tap on the item or the check box to the left of the item.
-* [Y] Ability to delete an item. Just swipe left on the item
+* [Y] Ability to delete an item. Just swipe left on the item.
 * [Y] Ability to quickly add an item without filling all the details and ability to add an item after specifying all the details. This increases the usability of the app as not always everybody wants to fill all the details before saving the item.
 * [Y] Ability to write some notes about an item. This will help the user record more information about the item.
 
