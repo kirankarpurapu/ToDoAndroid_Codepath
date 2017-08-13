@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.kirank.todo.R;
@@ -34,12 +35,21 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
     private final List<ToDo> todoItems = DataSource.getTodoItems();
     private final LayoutInflater layoutInflater;
     private final TodoItemClickListener todoItemClickListener;
+    private boolean showCompleted = true;
 
     public ToDoMainAdapter(Context context, TodoItemClickListener todoItemClickListener) {
 
         super();
         this.layoutInflater = LayoutInflater.from(context);
         this.todoItemClickListener = todoItemClickListener;
+    }
+
+
+    public void showCompleted() {
+        this.showCompleted = true;
+    }
+    public void hideCompleted() {
+        this.showCompleted = false;
     }
 
     @Override
@@ -54,6 +64,14 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
 
         ToDo item = todoItems.get(position);
         holder.nameOfTodoItem.setText(item.getToDoText());
+
+        if(item.isToDoCompleted()) {
+            holder.stateOfTodoItem.setChecked(true);
+        }
+        else {
+            holder.stateOfTodoItem.setChecked(false);
+        }
+
         Priority priority = item.getToDoPriority();
 
         if (priority == Priority.DEFAULT) {
@@ -70,6 +88,21 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
         } else if (priority == Priority.HIGH) {
             holder.priorityOfTodoItem.setVisibility(View.VISIBLE);
             holder.priorityOfTodoItem.setImageResource(R.drawable.ic_filter_3_black_24dp);
+
+        }
+
+        if(!showCompleted) {
+            if(item.isToDoCompleted()) {
+
+                final LinearLayout.LayoutParams params;
+                params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.height = 0;
+                holder.itemView.setLayoutParams(params);
+//                holder.itemView.setVisibility(View.GONE);
+            }
+        }
+        else {
 
         }
     }
@@ -109,13 +142,15 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
             this.stateOfTodoItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+
                     if(isChecked) {
                         nameOfTodoItem.setPaintFlags(nameOfTodoItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        removeAfterMilliSeconds(getAdapterPosition(), 2000);
                     }
                     else {
                         nameOfTodoItem.setPaintFlags(0);
                     }
+
+                    todoItemClickListener.checked(getAdapterPosition(), isChecked);
                 }
             });
             this.infoOfTodoItem.setOnClickListener(this);
@@ -128,10 +163,5 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
             Log.d(Constants.TODO_ADAPTER, "clicked on info of:" + position);
             todoItemClickListener.clicked(position);
         }
-    }
-
-    private void removeAfterMilliSeconds(final int position, int time) {
-
-        todoItemClickListener.checked(position, time);
     }
 }

@@ -30,7 +30,7 @@ public class ToDo extends BaseModel {
     private String toDoNotes;
 
     @Column
-    private boolean isToDoCompleted;
+    private boolean isToDoCompleted = false;
 
     @Column
     private Calendar toDoDate;

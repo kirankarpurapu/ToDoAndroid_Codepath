@@ -58,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         bindViews();
         addListeners();
         prepareAdapter();
+
+//        toDoMainAdapter.hideCompleted();
+        todoListRecyclerView.setAdapter(toDoMainAdapter);
+
+        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
+
+        itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
     }
 
     private void bindViews() {
@@ -118,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
                             ToDo toDo = new ToDo();
                             toDo.setToDoText(newTodoString);
+                            toDo.setToDoCompleted(false);
                             toDo.save();
 
                             DataSource.updateDataSource();
@@ -175,16 +183,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void checked(final int position, final int time) {
-                Snackbar.make(coordinatorLayout, "checked on item at position " + position, Snackbar.LENGTH_SHORT).show();
-                DataSource.get(position).setToDoCompleted(true);
+            public void checked(final int position, boolean isChecked) {
+                Log.d(Constants.MAIN_ACTIVITY, "checked on item at " + position);
+
+                ToDo item = DataSource.get(position);
+                if(isChecked)
+                    item.setToDoCompleted(true);
+                else
+                    item.setToDoCompleted(false);
+
+                item.save();
+                DataSource.updateDataSource();
+
+                //commenting this line because I dont want the item to disappear immediately
+                // I want it to disappear next time the app launches
+//                toDoMainAdapter.notifyDataSetChanged();
+
             }
         });
-
-        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
-        itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
-        todoListRecyclerView.setAdapter(toDoMainAdapter);
-
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
