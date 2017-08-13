@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
+import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.model.Priority;
-import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,11 +86,11 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
     }
 
     private void initScreen(int itemLocation) {
-        final DataSource dataSource = new DataSource();
-        final TodoItem item = dataSource.get(itemLocation);
 
-        this.toDoEditText.setText(item.getTodoTask());
-        final Calendar calendar = item.getDueDate();
+        final ToDo item = DataSource.get(itemLocation);
+
+        this.toDoEditText.setText(item.getToDoText());
+        final Calendar calendar = item.getToDoDate();
         if (calendar != null) {
             this.remindOnADaySwitch.setChecked(true);
             this.calendarToggleSwitch.setChecked(false);
@@ -101,7 +101,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             this.calendarToggleSwitch.setVisibility(View.VISIBLE);
         }
 
-        final Priority itemPriority = item.getPriority();
+        final Priority itemPriority = item.getToDoPriority();
         if (itemPriority != Priority.DEFAULT) {
             if (itemPriority == Priority.LOW)
                 this.prioritySpinner.setSelection(1);
@@ -111,7 +111,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
                 this.prioritySpinner.setSelection(3);
         }
 
-        final String notes = item.getNotes();
+        final String notes = item.getToDoNotes();
         if (notes != null) {
             this.toDoNotes.setText(notes);
         }
@@ -160,7 +160,6 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_details, menu);
         return true;
@@ -172,46 +171,48 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.action_save) {
 
-            final String toDoString = this.toDoEditText.getText().toString();
-            Calendar calendar = null;
-
-            if(this.remindOnADaySwitch.isChecked()) {
-
-                int day = this.toDoDatePicker.getDayOfMonth();
-                int month = this.toDoDatePicker.getMonth() + 1;
-                int year = this.toDoDatePicker.getYear();
-
-                calendar = Calendar.getInstance();
-                calendar.set(year, month, day);
-            }
-
-            Priority priority = Priority.getPriority(prioritySpinner.getSelectedItem().toString());
-            if(priority == null) {
-                priority = Priority.DEFAULT;
-            }
-
-            String notes = toDoNotes.getText().toString();
-            if(notes.length() == 0) {
-                notes = null;
-            }
-
-            DataSource dataSource = new DataSource();
-            TodoItem thisItem = dataSource.get(toDoItemLocation);
-            thisItem.setTodoTask(toDoString);
-            thisItem.setDueDate(calendar);
-            thisItem.setPriority(priority);
-            thisItem.setNotes(notes);
-            dataSource.remove(toDoItemLocation);
-            dataSource.add(toDoItemLocation, thisItem);
-
+            updateToDoItem();
             finish();
-
             return true;
+
         } else if (id == R.id.action_cancel) {
             finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateToDoItem() {
+
+        final String toDoString = this.toDoEditText.getText().toString();
+        Calendar calendar = null;
+
+        if(this.remindOnADaySwitch.isChecked()) {
+
+            int day = this.toDoDatePicker.getDayOfMonth();
+            int month = this.toDoDatePicker.getMonth() + 1;
+            int year = this.toDoDatePicker.getYear();
+
+            calendar = Calendar.getInstance();
+            calendar.set(year, month, day);
+        }
+
+        Priority priority = Priority.getPriority(prioritySpinner.getSelectedItem().toString());
+        if(priority == null) {
+            priority = Priority.DEFAULT;
+        }
+
+        String notes = toDoNotes.getText().toString();
+        if(notes.length() == 0) {
+            notes = null;
+        }
+
+        ToDo thisItem = DataSource.get(toDoItemLocation);
+        thisItem.setToDoText(toDoString);
+        thisItem.setToDoDate(calendar);
+        thisItem.setToDoPriority(priority);
+        thisItem.setToDoNotes(notes);
+        thisItem.save();
     }
 }

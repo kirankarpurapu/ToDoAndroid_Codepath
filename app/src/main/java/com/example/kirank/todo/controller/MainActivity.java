@@ -31,8 +31,8 @@ import com.example.kirank.todo.R;
 import com.example.kirank.todo.adapter.ToDoMainAdapter;
 import com.example.kirank.todo.constants.Constants;
 import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
-import com.example.kirank.todo.model.TodoItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView newTodoButton;
     private Paint paint = new Paint();
     private RecyclerView todoListRecyclerView;
-    private final DataSource dataSource = new DataSource();
-
 
     public MainActivity() {
     }
@@ -87,9 +85,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 Log.d(Constants.MAIN_ACTIVITY, "clicked on info at new todo place");
-                TodoItem newItem = new TodoItem(newTodo.getText().toString());
 
-                dataSource.addItem(newItem);
+
+                ToDo toDo = new ToDo();
+                toDo.setToDoText(newTodo.getText().toString());
+                toDo.save();
+                DataSource.updateDataSource();
+
 
                 newTodo.getText().clear();
                 newTodo.clearFocus();
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
 
                 Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
-                intent.putExtra(Constants.SELECTED_ITEM_INDEX, dataSource.getSize() - 1);
+                intent.putExtra(Constants.SELECTED_ITEM_INDEX, DataSource.getTodoItems().size() - 1);
                 startActivity(intent);
             }
         });
@@ -110,18 +112,22 @@ public class MainActivity extends AppCompatActivity {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (newTodo.getRight() - newTodo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-                        String newTodoString = newTodo.getText().toString();
-                        if (newTodoString == null || newTodoString.length() == 0) {
 
-                        } else {
-                            TodoItem newTodoItem = new TodoItem(newTodoString);
-                            dataSource.addItem(newTodoItem);
+                        String newTodoString = newTodo.getText().toString();
+                        if (newTodoString.length() != 0) {
+
+                            ToDo toDo = new ToDo();
+                            toDo.setToDoText(newTodoString);
+                            toDo.save();
+
+                            DataSource.updateDataSource();
                             toDoMainAdapter.notifyDataSetChanged();
-                            todoListRecyclerView.scrollToPosition(dataSource.getSize() - 1);
+                            todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
+
                             newTodo.getText().clear();
                             newTodo.clearFocus();
                             newTodo.setCursorVisible(false);
+
                             final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
                         }
@@ -154,12 +160,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void prepareAdapter() {
 
-        this.toDoMainAdapter = new ToDoMainAdapter(dataSource.getTodoItems(), this, new TodoItemClickListener() {
+        this.toDoMainAdapter = new ToDoMainAdapter(this, new TodoItemClickListener() {
             @Override
             public void clicked(final int position) {
 
@@ -172,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void checked(final int position, final int time) {
                 Snackbar.make(coordinatorLayout, "checked on item at position " + position, Snackbar.LENGTH_SHORT).show();
-                dataSource.get(position).setCompleted(true);
+                DataSource.get(position).setToDoCompleted(true);
             }
         });
 
@@ -183,10 +188,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ItemTouchHelper.Callback createHelperCallback() {
+
         return new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+                Snackbar.make(coordinatorLayout, "moving todo items coming soon !!", Snackbar.LENGTH_SHORT).show();
+//                moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
             }
 
@@ -201,11 +209,14 @@ public class MainActivity extends AppCompatActivity {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
 
                     View itemView = viewHolder.itemView;
+
                     float height = (float) itemView.getBottom() - (float) itemView.getTop();
                     float width = height / 3;
+
                     paint.setColor(Color.parseColor("#D32F2F"));
                     RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
                     c.drawRect(background, paint);
+
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white_24dp);
                     RectF icon_dest = new RectF((float) itemView.getRight() - 2 * width, (float) itemView.getTop() + width, (float) itemView.getRight() - width, (float) itemView.getBottom() - width);
                     c.drawBitmap(icon, null, icon_dest, paint);
@@ -216,44 +227,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteItem(int position) {
+
         Log.d(Constants.MAIN_ACTIVITY, "delete Item at " + position);
-        dataSource.remove(position);
-        this.toDoMainAdapter.notifyItemRemoved(position);
-
+        ToDo item = DataSource.get(position);
+        item.delete();
+        DataSource.updateDataSource();
+        toDoMainAdapter.notifyDataSetChanged();
     }
 
-    private void moveItem(int fromPosition, int toPosition) {
-        Log.d(Constants.MAIN_ACTIVITY, "move Item from " + fromPosition + " to " + toPosition);
-
-        TodoItem item = dataSource.get(fromPosition);
-        dataSource.remove(fromPosition);
-        dataSource.add(toPosition, item);
-        this.toDoMainAdapter.notifyItemMoved(fromPosition, toPosition);
-    }
+//    private void moveItem(int fromPosition, int toPosition) {
+//        Log.d(Constants.MAIN_ACTIVITY, "move Item from " + fromPosition + " to " + toPosition);
+//
+//        TodoItem item = dataSource.get(fromPosition);
+//        dataSource.remove(fromPosition);
+//        dataSource.add(toPosition, item);
+//        this.toDoMainAdapter.notifyItemMoved(fromPosition, toPosition);
+//    }
 
 
     @Override
     public void onResume() {
+
         super.onResume();
+        DataSource.updateDataSource();
         toDoMainAdapter.notifyDataSetChanged();
+        todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             Snackbar.make(coordinatorLayout, "Settings coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.action_show_completed) {
+
             Snackbar.make(coordinatorLayout, "Completed Items coming soon !! ", Snackbar.LENGTH_SHORT).show();
             return true;
         }

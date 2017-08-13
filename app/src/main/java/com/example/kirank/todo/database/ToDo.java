@@ -17,14 +17,14 @@ import java.util.Calendar;
 public class ToDo extends BaseModel {
 
     @Column
-    @PrimaryKey
+    @PrimaryKey(autoincrement = true)
     private int id;
 
     @Column
     private String toDoText;
 
     @Column
-    private Priority toDoPriority;
+    private Priority toDoPriority = Priority.DEFAULT;
 
     @Column
     private String toDoNotes;

@@ -16,11 +16,14 @@ import android.widget.TextView;
 
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
+import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 import com.example.kirank.todo.model.Priority;
 import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kirank on 8/6/17.
@@ -28,16 +31,14 @@ import java.util.ArrayList;
 
 public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.CustomViewHolder>{
 
-    private final ArrayList<TodoItem> todoItems;
-    private final Context activity;
+    private final List<ToDo> todoItems = DataSource.getTodoItems();
     private final LayoutInflater layoutInflater;
     private final TodoItemClickListener todoItemClickListener;
 
-    public ToDoMainAdapter(@NonNull final ArrayList<TodoItem> list, Context activity, TodoItemClickListener todoItemClickListener) {
+    public ToDoMainAdapter(Context context, TodoItemClickListener todoItemClickListener) {
+
         super();
-        this.todoItems = list;
-        this.activity = activity;
-        this.layoutInflater = LayoutInflater.from(activity);
+        this.layoutInflater = LayoutInflater.from(context);
         this.todoItemClickListener = todoItemClickListener;
     }
 
@@ -51,9 +52,9 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
     @Override
     public void onBindViewHolder(final CustomViewHolder holder, final int position) {
 
-        TodoItem item = todoItems.get(position);
-        holder.nameOfTodoItem.setText(item.getTodoTask());
-        Priority priority = item.getPriority();
+        ToDo item = todoItems.get(position);
+        holder.nameOfTodoItem.setText(item.getToDoText());
+        Priority priority = item.getToDoPriority();
 
         if (priority == Priority.DEFAULT) {
             holder.priorityOfTodoItem.setVisibility(View.GONE);

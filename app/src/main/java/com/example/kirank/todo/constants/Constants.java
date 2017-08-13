@@ -10,6 +10,4 @@ public class Constants {
     public static final String MAIN_ACTIVITY = "MainActivity";
     public static final String TODO_DETAILS_ACTIVITY = "ToDoItemDetailsActivity";
     public static final String SELECTED_ITEM_INDEX = "Selected Item";
-    public static int ID = 1;
-
 }
