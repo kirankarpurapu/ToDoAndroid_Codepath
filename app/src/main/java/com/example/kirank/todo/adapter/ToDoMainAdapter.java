@@ -24,6 +24,7 @@ import com.example.kirank.todo.model.Priority;
 import com.example.kirank.todo.model.TodoItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -72,6 +73,16 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
             holder.stateOfTodoItem.setChecked(false);
         }
 
+        if(item.getToDoDate() != null) {
+            Calendar calendar = item.getToDoDate();
+            holder.dueDateOfTodoItem.setText(calendar.get(Calendar.MONTH) + "/ " + calendar.get(Calendar.DAY_OF_MONTH)
+                    + "/ " + calendar.get(Calendar.YEAR));
+            holder.dueDateOfTodoItem.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.dueDateOfTodoItem.setVisibility(View.GONE);
+        }
+
         Priority priority = item.getToDoPriority();
 
         if (priority == Priority.DEFAULT) {
@@ -115,6 +126,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
     public class CustomViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         private TextView nameOfTodoItem;
+        private TextView dueDateOfTodoItem;
         private ImageView infoOfTodoItem;
         private ImageView priorityOfTodoItem;
         private CheckBox stateOfTodoItem;
@@ -123,6 +135,7 @@ public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.Custom
             super(itemView);
 
             this.nameOfTodoItem = (TextView) itemView.findViewById(R.id.todo_item);
+            this.dueDateOfTodoItem = (TextView) itemView.findViewById(R.id.todo_item_due_date);
             this.infoOfTodoItem = (ImageView) itemView.findViewById(R.id.info_id);
             this.priorityOfTodoItem = (ImageView) itemView.findViewById(R.id.todo_priority);
             this.stateOfTodoItem = (CheckBox) itemView.findViewById(R.id.checkBox);
