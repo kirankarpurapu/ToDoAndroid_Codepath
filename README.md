@@ -25,7 +25,11 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [Y] Ability to mark an item as completed. Just tap on the item or the check box to the left of the item.
+* [Y] Ability to delete an item. Just swipe left on the item
+* [Y] Ability to quickly add an item without filling all the details and ability to add an item after specifying all the details. This increases the usability of the app as not always everybody wants to fill all the details before saving the item.
+* [Y] Ability to write some notes about an item. This will help the user record more information about the item.
+
 
 ## Video Walkthrough
 
