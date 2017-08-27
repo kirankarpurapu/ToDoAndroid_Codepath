@@ -26,27 +26,25 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.kirank.todo.R;
-import com.example.kirank.todo.adapter.ToDoMainAdapter;
+import com.example.kirank.todo.adapter.ToDoMainListAdapter;
 import com.example.kirank.todo.constants.Constants;
 import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.data.ParentTodoDataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 
-public class MainActivity extends AppCompatActivity {
+public class ChildToDoItemsActivity extends AppCompatActivity {
 
     private CoordinatorLayout coordinatorLayout;
-    private ToDoMainAdapter toDoMainAdapter;
+    private ToDoMainListAdapter toDoMainAdapter;
     private EditText newTodo;
     private ImageView newTodoInfo;
     private ImageView newTodoButton;
     private Paint paint = new Paint();
     private RecyclerView todoListRecyclerView;
-
-    public MainActivity() {
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +53,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
+        int parentItemPosition = getIntent().getIntExtra(Constants.SELECTED_PARENT_ITEM, -1);
+
+        toolbar.setTitle(ParentTodoDataSource.getParentItem(parentItemPosition));
+
         bindViews();
         addListeners();
         prepareAdapter();
+        prepareRecyclerView();
+        this.todoListRecyclerView.scrollToPosition(0);
+    }
+
+    private void prepareRecyclerView() {
 
 //        toDoMainAdapter.hideCompleted();
         todoListRecyclerView.setAdapter(toDoMainAdapter);
-
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
-
         itemTouchHelper.attachToRecyclerView(todoListRecyclerView);
     }
 
@@ -106,9 +111,10 @@ public class MainActivity extends AppCompatActivity {
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
 
-                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                Intent intent = new Intent(ChildToDoItemsActivity.this, ToDoItemDetailsActivity.class);
                 intent.putExtra(Constants.SELECTED_ITEM_INDEX, DataSource.getTodoItems().size() - 1);
-                startActivity(intent);
+
+                startActivityForResult(intent, Constants.BACK_FROM_DETAILS);
             }
         });
 
@@ -172,14 +178,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareAdapter() {
 
-        this.toDoMainAdapter = new ToDoMainAdapter(this, new TodoItemClickListener() {
+        this.toDoMainAdapter = new ToDoMainListAdapter(this, new TodoItemClickListener() {
             @Override
             public void clicked(final int position) {
 
                 Log.d(Constants.MAIN_ACTIVITY, "clicked on info of " + position);
-                Intent intent = new Intent(MainActivity.this, ToDoItemDetailsActivity.class);
+                Intent intent = new Intent(ChildToDoItemsActivity.this, ToDoItemDetailsActivity.class);
                 intent.putExtra(Constants.SELECTED_ITEM_INDEX, position);
-                startActivity(intent);
+                startActivityForResult(intent, Constants.BACK_FROM_DETAILS);
             }
 
             @Override
@@ -187,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(Constants.MAIN_ACTIVITY, "checked on item at " + position);
 
                 ToDo item = DataSource.get(position);
-                if(isChecked)
+                if (isChecked)
                     item.setToDoCompleted(true);
                 else
                     item.setToDoCompleted(false);
@@ -262,13 +268,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onResume() {
+    protected void onStart() {
+        super.onStart();
+        this.todoListRecyclerView.scrollToPosition(0);
 
-        super.onResume();
-        DataSource.updateDataSource();
-        toDoMainAdapter.notifyDataSetChanged();
-        todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
+    }
 
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.BACK_FROM_DETAILS) {
+            if (resultCode == Constants.ITEM_DETAILS_CLICKED_SAVE) {
+                Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+                DataSource.updateDataSource();
+                toDoMainAdapter.notifyDataSetChanged();
+                todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
+                
+            } else if (resultCode == Constants.ITEM_DETAILS_CLICKED_CANCEL) {
+                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+                todoListRecyclerView.scrollToPosition(0);
+            }
+        }
     }
 
     @Override

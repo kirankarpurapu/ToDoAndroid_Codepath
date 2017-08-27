@@ -2,8 +2,6 @@ package com.example.kirank.todo.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +19,7 @@ import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 import com.example.kirank.todo.model.Priority;
-import com.example.kirank.todo.model.TodoItem;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,14 +27,14 @@ import java.util.List;
  * Created by kirank on 8/6/17.
  */
 
-public class ToDoMainAdapter extends RecyclerView.Adapter<ToDoMainAdapter.CustomViewHolder>{
+public class ToDoMainListAdapter extends RecyclerView.Adapter<ToDoMainListAdapter.CustomViewHolder>{
 
     private final List<ToDo> todoItems = DataSource.getTodoItems();
     private final LayoutInflater layoutInflater;
     private final TodoItemClickListener todoItemClickListener;
     private boolean showCompleted = true;
 
-    public ToDoMainAdapter(Context context, TodoItemClickListener todoItemClickListener) {
+    public ToDoMainListAdapter(Context context, TodoItemClickListener todoItemClickListener) {
 
         super();
         this.layoutInflater = LayoutInflater.from(context);

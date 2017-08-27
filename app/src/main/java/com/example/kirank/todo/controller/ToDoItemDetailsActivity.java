@@ -1,5 +1,6 @@
 package com.example.kirank.todo.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -172,10 +173,12 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
         if (id == R.id.action_save) {
 
             updateToDoItem();
+            setResult(Constants.ITEM_DETAILS_CLICKED_SAVE);
             finish();
             return true;
 
         } else if (id == R.id.action_cancel) {
+            setResult(Constants.ITEM_DETAILS_CLICKED_CANCEL);
             finish();
             return true;
         }
