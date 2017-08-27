@@ -3,15 +3,14 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/background"
-              android:paddingTop="5dp"
-              android:paddingBottom="5dp"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingBottom="10dp"
+              android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/parent_todo_item_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textSize="20dp"
-        android:text="Parent Item ToDo"/>
+        android:text="Parent Item ToDo"
+        android:textSize="20sp"/>
 </LinearLayout>

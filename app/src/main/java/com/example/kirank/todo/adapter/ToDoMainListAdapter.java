@@ -52,7 +52,7 @@ public class ToDoMainListAdapter extends RecyclerView.Adapter<ToDoMainListAdapte
     @Override
     public CustomViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
-        View view = layoutInflater.inflate(R.layout.todo_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.child_todo_item, parent, false);
         return new CustomViewHolder(view);
     }
 

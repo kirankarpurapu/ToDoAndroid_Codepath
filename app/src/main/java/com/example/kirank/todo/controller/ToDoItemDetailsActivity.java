@@ -1,6 +1,5 @@
 package com.example.kirank.todo.controller;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +16,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
+import com.example.kirank.todo.data.DataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.model.Priority;
 
@@ -181,6 +180,13 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             setResult(Constants.ITEM_DETAILS_CLICKED_CANCEL);
             finish();
             return true;
+        } else if (id == R.id.action_delete) {
+            final ToDo toDoItem = DataSource.get(this.toDoItemLocation);
+            toDoItem.delete();
+            setResult(Constants.ITEM_DETAILS_CLICKED_CANCEL);
+            finish();
+            return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -191,7 +197,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
         final String toDoString = this.toDoEditText.getText().toString();
         Calendar calendar = null;
 
-        if(this.remindOnADaySwitch.isChecked()) {
+        if (this.remindOnADaySwitch.isChecked()) {
 
             int day = this.toDoDatePicker.getDayOfMonth();
             int month = this.toDoDatePicker.getMonth() + 1;
@@ -202,12 +208,12 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
         }
 
         Priority priority = Priority.getPriority(prioritySpinner.getSelectedItem().toString());
-        if(priority == null) {
+        if (priority == null) {
             priority = Priority.DEFAULT;
         }
 
         String notes = toDoNotes.getText().toString();
-        if(notes.length() == 0) {
+        if (notes.length() == 0) {
             notes = null;
         }
 

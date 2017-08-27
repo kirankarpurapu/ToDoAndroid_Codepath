@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.adapter.ToDoMainListAdapter;
@@ -49,14 +48,15 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_child_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
         int parentItemPosition = getIntent().getIntExtra(Constants.SELECTED_PARENT_ITEM, -1);
 
-        toolbar.setTitle(ParentTodoDataSource.getParentItem(parentItemPosition));
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(ParentTodoDataSource.getParentItem(parentItemPosition));
+        }
         bindViews();
         addListeners();
         prepareAdapter();
@@ -280,13 +280,15 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
 
         if (requestCode == Constants.BACK_FROM_DETAILS) {
             if (resultCode == Constants.ITEM_DETAILS_CLICKED_SAVE) {
-                Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
                 DataSource.updateDataSource();
                 toDoMainAdapter.notifyDataSetChanged();
                 todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
-                
+
             } else if (resultCode == Constants.ITEM_DETAILS_CLICKED_CANCEL) {
-                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+                DataSource.updateDataSource();
+                toDoMainAdapter.notifyDataSetChanged();
+//                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
                 todoListRecyclerView.scrollToPosition(0);
             }
         }
@@ -295,7 +297,7 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.child_todo_menu, menu);
         return true;
     }
 

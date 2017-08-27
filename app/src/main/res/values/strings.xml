@@ -5,4 +5,6 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="show_completed">Show Completed</string>
+    <string name="delete_list">Delete List</string>
+    <string name="delete">Delete</string>
 </resources>
