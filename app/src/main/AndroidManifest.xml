@@ -24,7 +24,6 @@
 
         <activity
             android:name=".controller.ToDoItemDetailsActivity"
-            android:windowSoftInputMode="adjustPan"
             android:label="ToDo Details">
 
         </activity>
