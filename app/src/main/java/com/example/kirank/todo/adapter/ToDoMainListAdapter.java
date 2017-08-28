@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
-import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.data.ChildToDoItemsDataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
 import com.example.kirank.todo.model.Priority;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class ToDoMainListAdapter extends RecyclerView.Adapter<ToDoMainListAdapter.CustomViewHolder>{
 
-    private final List<ToDo> todoItems = DataSource.getTodoItems();
+    private final List<ToDo> todoItems = ChildToDoItemsDataSource.getTodoItems();
     private final LayoutInflater layoutInflater;
     private final TodoItemClickListener todoItemClickListener;
     private boolean showCompleted = true;

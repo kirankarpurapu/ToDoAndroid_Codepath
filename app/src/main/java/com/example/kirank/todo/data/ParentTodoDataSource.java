@@ -22,18 +22,6 @@ public class ParentTodoDataSource {
         todoParentItems.add("Parent 2");
         todoParentItems.add("Parent 3");
         todoParentItems.add("Parent 4");
-        todoParentItems.add("Parent 5");
-        todoParentItems.add("Parent 1");
-        todoParentItems.add("Parent 2");
-        todoParentItems.add("Parent 3");
-        todoParentItems.add("Parent 4");
-        todoParentItems.add("Parent 5");
-        todoParentItems.add("Parent 1");
-        todoParentItems.add("Parent 2");
-        todoParentItems.add("Parent 3");
-        todoParentItems.add("Parent 4");
-        todoParentItems.add("Parent 5");
-
 
     }
 

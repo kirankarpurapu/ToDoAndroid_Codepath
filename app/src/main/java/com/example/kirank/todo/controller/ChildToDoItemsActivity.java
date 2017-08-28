@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.adapter.ToDoMainListAdapter;
 import com.example.kirank.todo.constants.Constants;
-import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.data.ChildToDoItemsDataSource;
 import com.example.kirank.todo.data.ParentTodoDataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.listener.TodoItemClickListener;
@@ -102,7 +102,7 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
                 ToDo toDo = new ToDo();
                 toDo.setToDoText(newTodo.getText().toString());
                 toDo.save();
-                DataSource.updateDataSource();
+                ChildToDoItemsDataSource.updateDataSource();
 
 
                 newTodo.getText().clear();
@@ -112,7 +112,7 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(newTodo.getWindowToken(), 0);
 
                 Intent intent = new Intent(ChildToDoItemsActivity.this, ToDoItemDetailsActivity.class);
-                intent.putExtra(Constants.SELECTED_ITEM_INDEX, DataSource.getTodoItems().size() - 1);
+                intent.putExtra(Constants.SELECTED_ITEM_INDEX, ChildToDoItemsDataSource.getTodoItems().size() - 1);
 
                 startActivityForResult(intent, Constants.BACK_FROM_DETAILS);
             }
@@ -134,9 +134,9 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
                             toDo.setToDoCompleted(false);
                             toDo.save();
 
-                            DataSource.updateDataSource();
+                            ChildToDoItemsDataSource.updateDataSource();
                             toDoMainAdapter.notifyDataSetChanged();
-                            todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
+                            todoListRecyclerView.scrollToPosition(ChildToDoItemsDataSource.getTodoItems().size() - 1);
 
                             newTodo.getText().clear();
                             newTodo.clearFocus();
@@ -192,14 +192,14 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
             public void checked(final int position, boolean isChecked) {
                 Log.d(Constants.MAIN_ACTIVITY, "checked on item at " + position);
 
-                ToDo item = DataSource.get(position);
+                ToDo item = ChildToDoItemsDataSource.get(position);
                 if (isChecked)
                     item.setToDoCompleted(true);
                 else
                     item.setToDoCompleted(false);
 
                 item.save();
-                DataSource.updateDataSource();
+                ChildToDoItemsDataSource.updateDataSource();
 
                 //commenting this line because I dont want the item to disappear immediately
                 // I want it to disappear next time the app launches
@@ -251,9 +251,9 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
     private void deleteItem(int position) {
 
         Log.d(Constants.MAIN_ACTIVITY, "delete Item at " + position);
-        ToDo item = DataSource.get(position);
+        ToDo item = ChildToDoItemsDataSource.get(position);
         item.delete();
-        DataSource.updateDataSource();
+        ChildToDoItemsDataSource.updateDataSource();
         toDoMainAdapter.notifyDataSetChanged();
     }
 
@@ -277,17 +277,16 @@ public class ChildToDoItemsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ChildToDoItemsDataSource.updateDataSource();
+        toDoMainAdapter.notifyDataSetChanged();
 
         if (requestCode == Constants.BACK_FROM_DETAILS) {
             if (resultCode == Constants.ITEM_DETAILS_CLICKED_SAVE) {
 //                Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
-                DataSource.updateDataSource();
-                toDoMainAdapter.notifyDataSetChanged();
-                todoListRecyclerView.scrollToPosition(DataSource.getTodoItems().size() - 1);
+
+                todoListRecyclerView.scrollToPosition(ChildToDoItemsDataSource.getTodoItems().size() - 1);
 
             } else if (resultCode == Constants.ITEM_DETAILS_CLICKED_CANCEL) {
-                DataSource.updateDataSource();
-                toDoMainAdapter.notifyDataSetChanged();
 //                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
                 todoListRecyclerView.scrollToPosition(0);
             }

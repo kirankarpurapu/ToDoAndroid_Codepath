@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.kirank.todo.R;
 import com.example.kirank.todo.constants.Constants;
-import com.example.kirank.todo.data.DataSource;
+import com.example.kirank.todo.data.ChildToDoItemsDataSource;
 import com.example.kirank.todo.database.ToDo;
 import com.example.kirank.todo.model.Priority;
 
@@ -87,7 +87,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
 
     private void initScreen(int itemLocation) {
 
-        final ToDo item = DataSource.get(itemLocation);
+        final ToDo item = ChildToDoItemsDataSource.get(itemLocation);
 
         this.toDoEditText.setText(item.getToDoText());
         final Calendar calendar = item.getToDoDate();
@@ -181,7 +181,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.action_delete) {
-            final ToDo toDoItem = DataSource.get(this.toDoItemLocation);
+            final ToDo toDoItem = ChildToDoItemsDataSource.get(this.toDoItemLocation);
             toDoItem.delete();
             setResult(Constants.ITEM_DETAILS_CLICKED_CANCEL);
             finish();
@@ -217,7 +217,7 @@ public class ToDoItemDetailsActivity extends AppCompatActivity {
             notes = null;
         }
 
-        ToDo thisItem = DataSource.get(toDoItemLocation);
+        ToDo thisItem = ChildToDoItemsDataSource.get(toDoItemLocation);
         thisItem.setToDoText(toDoString);
         thisItem.setToDoDate(calendar);
         thisItem.setToDoPriority(priority);

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by kirank on 8/6/17.
  */
 
-public class DataSource {
+public class ChildToDoItemsDataSource {
 
     private static List<ToDo> toDoItems;
 
